@@ -6,6 +6,10 @@ from datetime import datetime
 import os
 import json
 from flask import Flask, request
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Initialize Flask app for webhook
 app = Flask(__name__)
