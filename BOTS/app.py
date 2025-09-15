@@ -171,6 +171,10 @@ def webhook():
     bot.process_new_updates([update])
     return '', 200
 
+@app.route("/", methods=["GET"])
+def home():
+    return "🤖 Bot is running!"
+
 # Webhook setup for production (optional)
 if __name__ == '__main__':
     # For local development (polling)
@@ -187,3 +191,4 @@ if __name__ == '__main__':
     else:
         print("WEBHOOK_URL not set. Running in polling mode...")
         bot.polling(none_stop=True)
+
