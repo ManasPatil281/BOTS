@@ -4,6 +4,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime
 import os
+import json
 from flask import Flask, request
 
 # Initialize Flask app for webhook
@@ -16,11 +17,12 @@ bot = telebot.TeleBot(BOT_TOKEN)
 # Initialize Firebase (if not already initialized)
 if not firebase_admin._apps:
     try:
-        cred = credentials.Certificate('BOTS/firebase.json')
+        firebase_creds = json.loads(os.getenv('FIREBASE_CREDENTIALS'))
+        cred = credentials.Certificate(firebase_creds)
         firebase_admin.initialize_app(cred)
     except Exception as e:
         print(f"Error initializing Firebase: {e}")
-        print("Please ensure 'firebase.json' is in the correct location.")
+        print("Please ensure FIREBASE_CREDENTIALS is set in environment variables.")
         exit(1)  # Exit if Firebase can't be initialized
 
 db = firestore.client()
