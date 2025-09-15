@@ -166,10 +166,15 @@ def handle_status_check(message, user_id, text):
 # Webhook endpoint for Telegram
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    json_str = request.get_data().decode('UTF-8')
-    update = telebot.types.Update.de_json(json_str)
-    bot.process_new_updates([update])
+    try:
+        json_str = request.get_data().decode('UTF-8')
+        update_dict = json.loads(json_str)
+        update = telebot.types.Update.de_json(update_dict)
+        bot.process_new_updates([update])
+    except Exception as e:
+        print(f"Webhook error: {e}")
     return '', 200
+
 
 @app.route("/", methods=["GET"])
 def home():
@@ -191,4 +196,5 @@ if __name__ == '__main__':
     else:
         print("WEBHOOK_URL not set. Running in polling mode...")
         bot.polling(none_stop=True)
+
 
