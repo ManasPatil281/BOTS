@@ -163,17 +163,24 @@ def handle_status_check(message, user_id, text):
     del user_sessions[user_id]
     bot.reply_to(message, response_text, reply_markup=telegram_bot_handler.create_main_menu(), parse_mode='Markdown')
 
+@bot.message_handler(func=lambda m: True)
+def echo_all(message):
+    print(f"Message received: {message.text}")  # 👈 log to Render
+    bot.reply_to(message, f"Echo: {message.text}")
+
 # Webhook endpoint for Telegram
 @app.route('/webhook', methods=['POST'])
 def webhook():
     try:
         json_str = request.get_data().decode('UTF-8')
         update_dict = json.loads(json_str)
+        print(f"Telegram update: {update_dict}")  # 👈 log update
         update = telebot.types.Update.de_json(update_dict)
         bot.process_new_updates([update])
     except Exception as e:
         print(f"Webhook error: {e}")
     return '', 200
+
 
 
 @app.route("/", methods=["GET"])
@@ -196,5 +203,6 @@ if __name__ == '__main__':
     else:
         print("WEBHOOK_URL not set. Running in polling mode...")
         bot.polling(none_stop=True)
+
 
 
