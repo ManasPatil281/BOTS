@@ -2,3 +2,4 @@ pyTelegramBotAPI
 firebase-admin
 flask
 gunicorn
+dotenv
